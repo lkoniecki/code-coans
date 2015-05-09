@@ -76,6 +76,19 @@ public class UnsortedArrayTest {
 		assertEquals("Wrong allocation size", 2, array.size());
 	}
 
+	@Test
+	public void testIterator() {
+		UnsortedArray<Integer> array = new UnsortedArray<Integer>(10);
+		//fill array so that only 3/4 of the array is occupied
+		int noElements = 15;
+		fillArrayWithConsecutiveElements(array, 0, noElements);
+		int idx = 0;
+		for (Integer element : array) {
+			assertEquals("Wrong element", idx++, (int)element);
+		}
+		assertEquals("Wrong iteration count", noElements, idx);
+	}
+
 	private void fillArrayWithConsecutiveElements(UnsortedArray array, int first, int noElements) {
 		int last = first + noElements;
 		for (int idx = first; idx < last; idx++) {

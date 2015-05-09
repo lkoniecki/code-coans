@@ -1,20 +1,24 @@
 package structures;
 
 import java.util.Arrays;
+import java.lang.Iterable;
+import java.util.Iterator;
 
 /**
- * Weak typing unsorted array.<br/>
- * Implmementation properties:<br/>
+ * Weak typing unsorted array.<br>
+ * Implmementation properties:<br>
  * <ul>
  * <li>elemets order is not preserved during elements deletion</li>
  * <li>if newly added element doesn't fit into currently allocated memory, size of the array is doubled</li>
  * <li>after element is removed from the array and if there is less than 1/4 
  * buckets occupied in the array, array is shrinked by half</li>
+ * <li>{@code UnsortedArray} {@code Iterator} doesn't support remove operation
+ * since removing element from an array doesn't preserve elements order</li>
  * </ul>
  * @author Łukasz Koniecki
  * @version 1.0.0
  */
-public class UnsortedArray<V> {
+public class UnsortedArray<V> implements Iterable<V> {
 	//element not found in the array
 	public static final int ELEMENT_NOT_FOUND = -1;
 	//array elements
@@ -56,6 +60,7 @@ public class UnsortedArray<V> {
 
 	/**
 	 * Gets element at {@code index} in the array
+	 * @param index of element to return
 	 * @return element at possition {@code index}
 	 * @since 1.0.0
 	 */
@@ -85,7 +90,7 @@ public class UnsortedArray<V> {
 	 * Returns position of the first element equal {@code element} in the array
 	 * @param element element to search
 	 * @return element position if the array if element was found in the array, -1 otherwise
-	 * @throw IllegalArgumentException if element is null
+	 * @throws IllegalArgumentException if element is null
 	 * @since 1.0.0
 	 */
 	public int search(V element) {
@@ -152,5 +157,33 @@ public class UnsortedArray<V> {
 		}
 		b.append("]");
 		return b.toString();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Iterator<V> iterator() {
+		return new Iterator<V>() {
+			private int idx = 0;
+
+			@Override
+			public boolean hasNext() {
+				if (idx < pointer) {
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			public V next() {
+				return (V)elements[idx++];
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Not implemented");
+			}
+		};
 	}
 }
