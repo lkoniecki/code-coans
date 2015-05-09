@@ -1,3 +1,5 @@
+package util;
+
 /**
  * Method dividing two integer numbers using bit operations
  * @version 1.0.0
